@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.Decoder;
 import java.security.Key;
@@ -54,7 +55,36 @@ public class JwtUtils {
 
     }
 
-    private Key key(){
+    public String getUserNameFromJwtToken(String token , SecretKey secretKey){
+
+        return Jwts.parser().verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+
+    }
+
+    public boolean validiateToken(String authToken ,SecretKey secretKey){
+
+        try {
+            Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(authToken);
+            return true;
+        }catch (Exception e){
+           logger.debug("Jwt authToken is not valid");
+        }
+        return false;
+
+
+    }
+
+
+
+    private Key key()
+    {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
