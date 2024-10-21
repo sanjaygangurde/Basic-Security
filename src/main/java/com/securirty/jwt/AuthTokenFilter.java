@@ -1,5 +1,6 @@
 package com.securirty.jwt;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +72,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         return jwt;
     }
-}
+
